@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  title: VU++ API
+  version: 1.0.0
+paths:
+  /api/v1/users:
+    get:
+      summary: Retrieve a list of users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:    
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/v1/users/{id}:
+    get:
+
+      summary: Retrieve a single user by id
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed to retrieve user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/articles:
+    get:
+      summary: Retrieve a list of articles
+      tags:
+        - Articles
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+        '500':
+          description: Failed to retrieve articles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Create a new article
+      tags:
+        - Articles
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '201':
+          description: Article created successfully
+          content:
+            application/json:    
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Article'
+        '500':
+          description: Failed to create article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/articles/{id}:
+    get:
+      summary: Retrieve a single article by id
+      tags:
+        - Articles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The MongoDB ID of the article to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:    
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Article'
+        '400':
+          description: Invalid article ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed to retrieve article
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+          example: "https://example.com/probs/resource-not-found"
+        title:
+          type: string
+          example: "Resource Not Found"
+        detail:
+          type: string
+          example: "The requested resource could not be found."
+        status:
+          type: integer
+          format: int32
+          example: 404
+        instance:
+          type: string
+          nullable: true
+          example: "/api/v1/articles/1"
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+        status:
+          type: string
+          enum: ['draft', 'published']
+        publishedAt:
+          type: string
+          format: date-time
+        featuredImage:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        categories:
+          type: array
+          items:
+            type: string
