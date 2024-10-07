@@ -52,11 +52,28 @@ const getArticleById = async (req, res) => {
             instance: req.originalUrl
         });
     }
-}
+};
+
+const createArticle = async (req, res) => {
+    try {
+        const article = await articleRepository.create(req.body);
+        res.status(201).json({ data: article });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            type: 'https://example.com/probs/internal-server-error',
+            title: 'Internal Server Error',
+            status: 500,
+            detail: 'An unexpected error occurred while creating article.',
+            instance: req.originalUrl
+        });
+    }
+};
 
 export default {
     getAllArticles,
-    getArticleById
+    getArticleById,
+    createArticle
 }
 
 // Best Practices and Improvements:

@@ -82,7 +82,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Article'
+                      $ref: '#/components/schemas/ArticleResponse'
         '500':
           description: Failed to retrieve articles
           content:
@@ -98,7 +98,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Article'
+              $ref: '#/components/schemas/ArticleRequest'
       responses:
         '201':
           description: Article created successfully
@@ -108,7 +108,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Article'
+                    $ref: '#/components/schemas/ArticleResponse'
         '500':
           description: Failed to create article
           content:
@@ -136,7 +136,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: '#/components/schemas/Article'
+                    $ref: '#/components/schemas/ArticleResponse'
         '400':
           description: Invalid article ID format
           content:
@@ -185,11 +185,19 @@ components:
           type: integer
         name:
           type: string
-    Article:
+    ArticleRequest:
+        allOf:
+          - $ref: '#/components/schemas/Article'
+    ArticleResponse:
       type: object
       properties:
         id:
           type: string
+      allOf:
+        - $ref: '#/components/schemas/Article'
+    Article:
+      type: object
+      properties:
         title:
           type: string
         content:

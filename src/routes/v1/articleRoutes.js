@@ -4,7 +4,8 @@ import articleController from '../../controllers/articleController.js';
 const router = express.Router();
 
 router.route('/')
-    .get(articleController.getAllArticles);
+    .get(articleController.getAllArticles)
+    .post(articleController.createArticle);
 
 router.route('/:id')
     .get(articleController.getArticleById);
